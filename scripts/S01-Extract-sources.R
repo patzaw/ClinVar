@@ -1,7 +1,7 @@
 setwd("~/Shared/Data-Science/Data-Source-Model-Repository/clinVar/scripts/")
 
 library(RJSONIO)
-source("downloadSourceFiles.R")
+source("../../00-Utils/downloadSourceFiles.R")
 
 desc <- readJSONStream("../DESCRIPTION.json")
 
