@@ -1,0 +1,60 @@
+ClinVar.DB	DB	Prefix.to.remove
+"Agnes Ginges Centre for Molecular Cardiology,Centenary Institute"	"Agnes Ginges Centre for Molecular Cardiology,Centenary Institute"	
+"Bone Marrow Failure laboratory,Queen Mary University London"	"Bone Marrow Failure laboratory,Queen Mary University London"	
+"Center for Genetic Medicine Research,Children's National Medical Center"	"Center for Genetic Medicine Research,Children's National Medical Center"	
+"Chelly Lab, Institut de Génétique et de Biologie Moléculaire et Cellulaire,Strasbourg University - CNRS UMR 7104 - Inserm U 964"	"Chelly Lab, Institut de Génétique et de Biologie Moléculaire et Cellulaire,Strasbourg University - CNRS UMR 7104 - Inserm U 964"	
+"Department of Traditional Chinese Medicine,Fujian Provincial Hospital"	"Department of Traditional Chinese Medicine,Fujian Provincial Hospital"	
+"Division of Genomic Diagnostics,The Children's Hospital of Philadelphia"	"Division of Genomic Diagnostics,The Children's Hospital of Philadelphia"	
+Division of Medical Genetics; Sainte-Justine Hospital	Division of Medical Genetics; Sainte-Justine Hospital	
+"Faculty of Science, Laboratory of Drosophila Research, School of Life Sciences,The Chinese University of Hong Kong, Hong Kong"	"Faculty of Science, Laboratory of Drosophila Research, School of Life Sciences,The Chinese University of Hong Kong, Hong Kong"	
+"Flegel Lab,National Institutes of Health"	"Flegel Lab,National Institutes of Health"	
+"Gene Discovery Core-Manton Center,Boston Children's Hospital"	"Gene Discovery Core-Manton Center,Boston Children's Hospital"	
+"Genetic Services Laboratory, University of Chicago"	"Genetic Services Laboratory, University of Chicago"	
+"Genetic Testing Lab,Ashok and Rita Patel Institute of Integrated Study and Research in Biotechnology and Allied Sciences"	"Genetic Testing Lab,Ashok and Rita Patel Institute of Integrated Study and Research in Biotechnology and Allied Sciences"	
+"Glaucoma Genetics Lab,University of Iowa"	"Glaucoma Genetics Lab,University of Iowa"	
+"Gromoll Lab CeRA, University of Muenster"	"Gromoll Lab CeRA, University of Muenster"	
+HBVAR	HBVAR	
+HudsonAlpha Institute for Biotechnology	HudsonAlpha Institute for Biotechnology	
+"Kopetz Lab,MD Anderson Cancer Center"	"Kopetz Lab,MD Anderson Cancer Center"	
+"Medical Genetics and Functional Genomics Laboratory,Aix-Marseille University"	"Medical Genetics and Functional Genomics Laboratory,Aix-Marseille University"	
+"Molecular Diagnostics Laboratory,Hospital Sainte-Justine"	"Molecular Diagnostics Laboratory,Hospital Sainte-Justine"	
+"Molecular Neurogenomics lab,VIB Department of Molecular Genetics; University of Antwerp"	"Molecular Neurogenomics lab,VIB Department of Molecular Genetics; University of Antwerp"	
+"Molecular Oncology Laboratory,Centre Jean Perrin"	"Molecular Oncology Laboratory,Centre Jean Perrin"	
+NCI	NCIt	
+"Northern Blood Research Centre, University of Sydney"	"Northern Blood Research Centre, University of Sydney"	
+"Pediatric Highly Intensive Care Unit,Fondazione IRCCS Ca' Granda Ospedale Maggiore Policlinico"	"Pediatric Highly Intensive Care Unit,Fondazione IRCCS Ca' Granda Ospedale Maggiore Policlinico"	
+"Personalized Diabetes Medicine Program,University of Maryland School of Medicine"	"Personalized Diabetes Medicine Program,University of Maryland School of Medicine"	
+"Programa de Pós-Graduação em Ciências Genômicas e Biotecnologia,Universidade Católica de Brasília"	"Programa de Pós-Graduação em Ciências Genômicas e Biotecnologia,Universidade Católica de Brasília"	
+"Puck Laboratory, University of California, San Francisco"	"Puck Laboratory, University of California, San Francisco"	
+"Thoracic Oncology,University of Hawaii Cancer Center"	"Thoracic Oncology,University of Hawaii Cancer Center"	
+Tuberous sclerosis database (TSC2)	Tuberous sclerosis database (TSC2)	
+UniProtKB/Swiss-Prot	UniProtKB/Swiss-Prot	
+"Urology laboratory, deVerdier,Karolinska Institutet"	"Urology laboratory, deVerdier,Karolinska Institutet"	
+"Zabetian_UW Neurogenetics Lab, University of Washington/VAPSHCS"	"Zabetian_UW Neurogenetics Lab, University of Washington/VAPSHCS"	
+"Department of Medical Genetics,Sanjay Gandhi Post Graduate Institute of Medical Sciences"	"Department of Medical Genetics,Sanjay Gandhi Post Graduate Institute of Medical Sciences"	
+"Institute of Molecular and Cell Biology, University of Tartu"	"Institute of Molecular and Cell Biology, University of Tartu"	
+"Donald Williams Parsons Laboratory,Baylor College of Medicine"	"Donald Williams Parsons Laboratory,Baylor College of Medicine"	
+"Knight Diagnostic Laboratories,Oregon Health and Sciences University"	"Knight Diagnostic Laboratories,Oregon Health and Sciences University"	
+ADAM	ADAM	
+"Endocrinology Clinic, Seth G.S. Medical College"	"Endocrinology Clinic, Seth G.S. Medical College"	
+"Lupski Lab, Baylor-Hopkins CMG,Baylor College of Medicine"	"Lupski Lab, Baylor-Hopkins CMG,Baylor College of Medicine"	
+Decipher	Decipher	
+"Centre for Mendelian Genomics,University Medical Centre Ljubljana"	"Centre for Mendelian Genomics,University Medical Centre Ljubljana"	
+EFO	EFO	EFO_
+"Developmental Genetics Unit,King Faisal Specialist Hospital & Research Centre"	"Developmental Genetics Unit,King Faisal Specialist Hospital & Research Centre"	
+CSER_CC_NCGL; University of Washington Medical Center	CSER_CC_NCGL; University of Washington Medical Center	
+"GenomeConnect, ClinGen"	"GenomeConnect, ClinGen"	
+GeneReviews	GeneReviews	
+MeSH	MeSH	
+Genetic Testing Registry (GTR)	Genetic Testing Registry (GTR)	
+GeneTests	GeneTests	
+Genetics Home Reference	Genetics Home Reference	
+Gene	Gene	
+"Illumina Clinical Services Laboratory,Illumina"	"Illumina Clinical Services Laboratory,Illumina"	
+SNOMED CT	SNOMEDCT	
+Office of Rare Diseases	Office of Rare Diseases	
+Genetic Alliance	Genetic Alliance	
+Orphanet	ORPHA	
+Human Phenotype Ontology	HP	HP:
+MedGen	MedGen	
+OMIM	OMIM	

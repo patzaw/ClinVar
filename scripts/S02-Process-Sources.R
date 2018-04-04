@@ -166,6 +166,21 @@ colnames(ClinVar_traitNames) <- c("t.id", "name", "type")
 ClinVar_traitCref <- ClinVar_traitXRef[,c("trait.id", "ID", "DB", "Type")]
 colnames(ClinVar_traitCref) <- c("t.id", "id", "db", "type")
 rm(ClinVar_traitXRef)
+## Cleaning trait cross references
+dbCleanTable <- read.table(
+   "DB-ID-Cleaning-Table.txt",
+   sep="\t", header=TRUE, stringsAsFactors=FALSE
+)
+for(i in 1:nrow(dbCleanTable)){
+   oriDb <- dbCleanTable$ClinVar.DB[i]
+   finalDb <- dbCleanTable$DB[i]
+   prefix <- dbCleanTable$Prefix.to.remove[i]
+   ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"] <- sub(
+      paste0("^", prefix), "",
+      ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"]
+   )
+   ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "db"] <- finalDb
+}
 ##
 ClinVar_variants <- unique(ClinVar_measures[,c("id", "type")])
 ClinVar_rcvaVariant <- ClinVar_measures[,c("id", "rcvaId")]
