@@ -7,7 +7,7 @@
 	"source files": [
 		{
 			"name":"ClinVarFullRelease.xml.gz",
-			"URL template":"ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_%s.xml.gz",
+			"URL template":"ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_YYYY-MM.xml.gz",
 			"remote update frequency": {
 				"value": 0.03,
 				"units": "1/day"

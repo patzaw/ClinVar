@@ -14,9 +14,10 @@ urls <- unlist(lapply(
       return(toRet)
    }
 ))
-urls["ClinVarFullRelease.xml.gz"] <- sprintf(
-   urls["ClinVarFullRelease.xml.gz"],
-   format(Sys.Date(), "%Y-%m")
+urls["ClinVarFullRelease.xml.gz"] <- sub(
+   "YYYY-MM",
+   format(Sys.Date(), "%Y-%m"),
+   urls["ClinVarFullRelease.xml.gz"]
 )
 srcDir <- "../sources"
 
