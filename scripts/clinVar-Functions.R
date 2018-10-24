@@ -198,7 +198,7 @@ parseObservedIn <- function(node, rcvaId){
                     species=xmlValue(x[["Sample"]][["Species"]]),
                     affectedStatus=xmlValue(x[["Sample"]][["AffectedStatus"]]),
                     numberTested=xmlValue(x[["Sample"]][["NumberTested"]]),
-                    sampleDescription=xmlValue(x[["Sample"]][["SampleDescription"]][["Description"]]),
+                    # sampleDescription=xmlValue(x[["Sample"]][["SampleDescription"]][["Description"]]),
                     ## Information for further exploration
                     nbObsInTraitSet=sum(names(x)=="TraitSet"),
                     nbSampleTraitSet=sum(names(x[["Sample"]])=="TraitSet"),

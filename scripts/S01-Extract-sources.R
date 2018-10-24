@@ -1,9 +1,8 @@
-setwd("~/Shared/Data-Science/Data-Source-Model-Repository/clinVar/scripts/")
-
 library(RJSONIO)
-source("../../00-Utils/downloadSourceFiles.R")
+library(here)
+source(here("../00-Utils/downloadSourceFiles.R"))
 
-desc <- readJSONStream("../DESCRIPTION.json")
+desc <- readJSONStream(here("DESCRIPTION.json"))
 
 sourceFiles <- desc$"source files"
 urls <- unlist(lapply(
@@ -19,6 +18,6 @@ urls["ClinVarFullRelease.xml.gz"] <- sub(
    format(Sys.Date(), "%Y-%m"),
    urls["ClinVarFullRelease.xml.gz"]
 )
-srcDir <- "../sources"
+srcDir <- here("sources")
 
 downloadSourceFiles(urls, srcDir)

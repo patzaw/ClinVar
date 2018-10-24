@@ -1,14 +1,15 @@
-setwd("~/Shared/Data-Science/Data-Source-Model-Repository/clinVar/scripts/")
-
-library(XML)
+library(here)
 library(parallel)
+library(XML)
 
-source("clinVar-Functions.R")
+source(here("../00-Utils/writeLastUpdate.R"))
+
+source(here("scripts/clinVar-Functions.R"))
 
 ##
 mc.cores <- 55
-sdir <- "../sources"
-ddir <- "../data"
+sdir <- here("sources")
+ddir <- here("data")
 
 ###############################################################################@
 ## Source information ----
@@ -168,7 +169,7 @@ colnames(ClinVar_traitCref) <- c("t.id", "id", "db", "type")
 rm(ClinVar_traitXRef)
 ## Cleaning trait cross references
 dbCleanTable <- read.table(
-   "DB-ID-Cleaning-Table.txt",
+   here("scripts/DB-ID-Cleaning-Table.txt"),
    sep="\t", header=TRUE, stringsAsFactors=FALSE
 )
 for(i in 1:nrow(dbCleanTable)){
@@ -344,3 +345,5 @@ for(f in toSave){
 }
 message(Sys.time())
 message("... Done\n")
+
+writeLastUpdate()
