@@ -200,8 +200,8 @@ parseObservedIn <- function(node, rcvaId){
                     numberTested=xmlValue(x[["Sample"]][["NumberTested"]]),
                     # sampleDescription=xmlValue(x[["Sample"]][["SampleDescription"]][["Description"]]),
                     ## Information for further exploration
-                    nbObsInTraitSet=sum(names(x)=="TraitSet"),
-                    nbSampleTraitSet=sum(names(x[["Sample"]])=="TraitSet"),
+                    # nbObsInTraitSet=sum(names(x)=="TraitSet"),
+                    # nbSampleTraitSet=sum(names(x[["Sample"]])=="TraitSet"),
                     stringsAsFactors=F
                 ))
             }

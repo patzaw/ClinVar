@@ -1,13 +1,14 @@
 library(here)
 library(parallel)
 library(XML)
+library(tidyverse)
 
 source(here("../00-Utils/writeLastUpdate.R"))
 
 source(here("scripts/clinVar-Functions.R"))
 
 ##
-mc.cores <- 55
+mc.cores <- 30
 sdir <- here("sources")
 ddir <- here("data")
 
@@ -21,17 +22,20 @@ sfi <- read.table(
    header=T,
    stringsAsFactors=FALSE
 )
-ClinVar_sourceFiles <- sfi[which(sfi$inUse), c("url", "current")]
+ClinVar_sourceFiles <- sfi[which(sfi$inUse), c("url", "current")] %>%
+   as_tibble() %>%
+   mutate(current=as.character(as.Date(current)))
 
 ###############################################################################@
 ## Data from ClinVarFullRelease.xml.gz ----
 ###############################################################################@
 
-## * Loading and parsing XML
+###############################################################################@
+## _+ Loading and parsing XML ----
 message("Loading XML...")
 message(Sys.time())
 xmlFile <- file.path(sdir, "ClinVarFullRelease.xml.gz")
-cvList <- readClinVar(xmlFile) #, n=400000) # total: >37210660
+cvList <- readClinVar(xmlFile) #, n=100000) # total: >37210660
 encoding <- attr(cvList, "encoding")
 message(Sys.time())
 message("... Done\n")
@@ -81,7 +85,8 @@ rm(cl)
 message(Sys.time())
 message("... Done\n")
 
-## * Generating tables ----
+###############################################################################@
+## _+ Generating tables ----
 message("Generating tables...")
 message(Sys.time())
 toMerge <- unique(unlist(lapply(cvDbList, names)))
@@ -96,10 +101,20 @@ for(tm in toMerge){
 message(Sys.time())
 message("... Done\n")
 
-## * Organizing tables ----
+###############################################################################@
+## Organizing tables ----
+###############################################################################@
+
 message("Organizing tables...")
 message(Sys.time())
-##
+
+ClinVar_rcvaAttributes <- ClinVar_rcvaAttributes %>%
+   as_tibble() %>%
+   unique()
+
+###############################################################################@
+## _+ ReferenceClinVarAssertion ----
+
 ClinVar_ReferenceClinVarAssertion <- merge(
    ClinVar_ReferenceClinVarAssertion,
    ClinVar_ClinVarSet,
@@ -108,191 +123,284 @@ ClinVar_ReferenceClinVarAssertion <- merge(
    all=T
 )
 rm(ClinVar_ClinVarSet)
-##
-ClinVar_rcvaInhMode <- ClinVar_rcvaAttributes[
-   which(ClinVar_rcvaAttributes$Type=="ModeOfInheritance"),
-   c("rcva.id", "value")
-   ]
-ClinVar_rcvaInhMode$value <- toupper(ClinVar_rcvaInhMode$value)
-ClinVar_rcvaInhMode <- unique(ClinVar_rcvaInhMode)
-colnames(ClinVar_rcvaInhMode) <- c("rcvaId", "inhMode")
+ClinVar_ReferenceClinVarAssertion <- ClinVar_ReferenceClinVarAssertion %>%
+   as_tibble() %>%
+   mutate(
+      cvs=as.integer(cvs),
+      id=as.integer(id)
+   ) %>%
+   unique()
+
+###############################################################################@
+## _+ rcvaInhMode ----
+
+ClinVar_rcvaInhMode <- ClinVar_rcvaAttributes %>%
+   filter(Type=="ModeOfInheritance") %>%
+   select(rcva.id, value) %>%
+   mutate(
+      value=toupper(value),
+      rcva.id=as.integer(rcva.id)
+   ) %>%
+   unique() %>%
+   rename("rcvaId"="rcva.id", "inhMode"="value")
+
+
 otherAttTypes <- unique(setdiff(ClinVar_rcvaAttributes$Type, "ModeOfInheritance"))
 if(length(otherAttTypes)>0){
    warning("Other RCVA attributes: ", paste(otherAttTypes, collapse=", "))
 }
 rm(ClinVar_rcvaAttributes)
-##
-ClinVar_rcvaObservedIn <- ClinVar_observedIn
-ClinVar_rcvaObservedIn <- ClinVar_rcvaObservedIn[,c(
-   "rcvaId", setdiff(colnames(ClinVar_rcvaObservedIn), "rcvaId")
-)]
+
+###############################################################################@
+## _+ rcvaObservedInd ----
+
+ClinVar_rcvaObservedIn <- ClinVar_observedIn %>%
+   as_tibble() %>%
+   mutate(
+      rcvaId=as.integer(rcvaId),
+      numberTested=as.integer(numberTested)
+   ) %>%
+   select(
+      rcvaId, origin, taxonomyId, species, affectedStatus, numberTested
+   ) %>%
+   unique()
 rm(ClinVar_observedIn)
-##
-# ClinVar_ClinVarAssertions unchanged
-##
-##
-ClinVar_cvaSubmitters <- ClinVar_submitters[,c("cvaId", "submitter", "primary")]
+
+###############################################################################@
+## _+ ClinVarAssertions ----
+
+ClinVar_ClinVarAssertions <- ClinVar_ClinVarAssertions %>%
+   as_tibble() %>%
+   mutate(
+      cvs=as.integer(cvs),
+      id=as.integer(id)
+   ) %>%
+   unique()
+
+###############################################################################@
+## _+ cvaSubmitters ----
+
+ClinVar_cvaSubmitters <- ClinVar_submitters %>%
+   as_tibble() %>%
+   select(cvaId, submitter, primary) %>%
+   mutate(cvaId=as.integer(cvaId)) %>%
+   unique()
 rm(ClinVar_submitters)
-##
-ClinVar_cvaObservedIn <- ClinVar_cvaObservedIn[,c(
-   "cvaId", setdiff(colnames(ClinVar_cvaObservedIn), "cvaId")
-)]
-##
-ClinVar_rcvaTraits <- ClinVar_traits[,c("rcvaId", "id", "type")]
-colnames(ClinVar_rcvaTraits) <- c("rcvaId", "t.id", "traitType")
+
+###############################################################################@
+## _+ cvaObservedIn ----
+
+ClinVar_cvaObservedIn <- ClinVar_cvaObservedIn %>%
+   as_tibble() %>%
+   select(cvaId, origin, species, affectedStatus) %>%
+   mutate(cvaId=as.integer(cvaId)) %>%
+   unique()
+
+###############################################################################@
+## _+ rcvaTraits ----
+
+ClinVar_rcvaTraits <- ClinVar_traits %>%
+   as_tibble() %>%
+   select(rcvaId, id, type) %>%
+   rename("t.id"="id", "traitType"="type") %>%
+   mutate(
+      rcvaId=as.integer(rcvaId),
+      t.id=as.integer(t.id)
+   ) %>%
+   unique()
 rm(ClinVar_traits)
-##
-ClinVar_traits <- ClinVar_traitNames[
-   which(ClinVar_traitNames$trait.name.type=="Preferred"),
-   c("trait.id", "trait.name")
-   ]
+
+###############################################################################@
+## _+ traits ----
+
+ClinVar_traits <- ClinVar_traitNames %>%
+   as_tibble() %>%
+   filter(trait.name.type=="Preferred") %>%
+   select(trait.id, trait.name)
 toAdd <- unique(setdiff(ClinVar_traitNames$trait.id, ClinVar_traits$trait.id))
 if(length(toAdd) > 0){
-   toAdd <- ClinVar_traitNames[
-      which(
-         ClinVar_traitNames$trait.id %in% toAdd &
-            !duplicated(ClinVar_traitNames$trait.id)
-      ),
-      c("trait.id", "trait.name")
-      ]
-   ClinVar_traits <- rbind(ClinVar_traits, toAdd)
+   ClinVar_traits <- ClinVar_traits %>%
+      bind_rows(
+         ClinVar_traitNames %>%
+         as_tibble() %>%
+         filter(trait.id %in% toAdd) & !duplicated(trait.id) %>%
+         select(trait.id, trait.name)
+      )
 }
-colnames(ClinVar_traits) <- c("id", "name")
-##
-ClinVar_traitNames <- ClinVar_traitNames[, c(
-   "trait.id", "trait.name", "trait.name.type"
-)]
-colnames(ClinVar_traitNames) <- c("t.id", "name", "type")
-##
-ClinVar_traitCref <- ClinVar_traitXRef[,c("trait.id", "ID", "DB", "Type")]
-colnames(ClinVar_traitCref) <- c("t.id", "id", "db", "type")
+ClinVar_traits <- ClinVar_traits%>%
+   rename("id"="trait.id", "name"="trait.name") %>%
+   mutate(id=as.integer(id))
+
+###############################################################################@
+## _+ traitNames ----
+
+ClinVar_traitNames <- ClinVar_traitNames %>%
+   as_tibble() %>%
+   select(trait.id, trait.name, trait.name.type) %>%
+   rename("t.id"="trait.id", "name"="trait.name", "type"="trait.name.type") %>%
+   mutate(t.id=as.integer(t.id))
+
+###############################################################################@
+## _+ traitCref ----
+
+ClinVar_traitCref <- ClinVar_traitXRef %>%
+   as_tibble() %>%
+   select(trait.id, ID, DB, Type) %>%
+   rename("t.id"="trait.id", "id"="ID", "db"="DB", "type"="Type") %>%
+   mutate(t.id=as.integer(t.id)) %>%
+   unique()
 rm(ClinVar_traitXRef)
 ## Cleaning trait cross references
-dbCleanTable <- read.table(
-   here("scripts/DB-ID-Cleaning-Table.txt"),
-   sep="\t", header=TRUE, stringsAsFactors=FALSE
+dbCleanTable <- read_tsv(
+   here("scripts/DB-ID-Cleaning-Table.txt")
 )
 for(i in 1:nrow(dbCleanTable)){
    oriDb <- dbCleanTable$ClinVar.DB[i]
    finalDb <- dbCleanTable$DB[i]
    prefix <- dbCleanTable$Prefix.to.remove[i]
-   ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"] <- sub(
-      paste0("^", prefix), "",
-      ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"]
+   ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"] <- str_remove(
+      ClinVar_traitCref$id[which(ClinVar_traitCref$db==oriDb)],
+      paste0("^", prefix)
    )
    ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "db"] <- finalDb
 }
+
+###############################################################################@
+## _+ variants, rcvaVariant, varNames ----
+
 ##
-ClinVar_variants <- unique(ClinVar_measures[,c("id", "type")])
-ClinVar_rcvaVariant <- ClinVar_measures[,c("id", "rcvaId")]
-colnames(ClinVar_rcvaVariant) <- c("varId", "rcvaId")
+ClinVar_variants <- ClinVar_measures %>%
+   as_tibble() %>%
+   select(id, type) %>%
+   mutate(id=as.integer(id)) %>%
+   unique()
+##
+ClinVar_rcvaVariant <- ClinVar_measures %>%
+   as_tibble() %>%
+   select(id, rcvaId) %>%
+   rename("varId"="id") %>%
+   mutate(
+      varId=as.integer(varId),
+      rcvaId=as.integer(rcvaId)
+   ) %>%
+   unique()
 rm(ClinVar_measures)
 ##
-ClinVar_varNames <- ClinVar_measureNames[,c("measureId", "name", "type")]
-colnames(ClinVar_varNames) <- c("varId", "name", "type")
+ClinVar_varNames <- ClinVar_measureNames %>%
+   as_tibble() %>%
+   select(measureId, name, type) %>%
+   rename("varId"="measureId") %>%
+   mutate(varId=as.integer(varId)) %>%
+   unique()
 rm(ClinVar_measureNames)
-ClinVar_variants <- merge(
-   ClinVar_variants,
-   ClinVar_varNames,
-   by.x="id", by.y="varId",
-   all=T
-)
-ClinVar_variants <- ClinVar_variants[order(ClinVar_variants$type.y, decreasing=T),]
-ClinVar_variants <- ClinVar_variants[
-   which(!duplicated(ClinVar_variants$id)),
-   c("id", "type.x", "name")
-   ]
-colnames(ClinVar_variants) <- c("id", "type", "name")
 ##
-ClinVar_varEntrez <- unique(ClinVar_measureRelationships[
-   which(
-      # ClinVar_measureRelationships$type=="variant in gene" &
-      ClinVar_measureRelationships$xref.db=="Gene"
-   ),
-   c("measureId", "xref.id", "type")
-   ])
-colnames(ClinVar_varEntrez) <- c("varId", "entrez", "type")
+ClinVar_variants <- ClinVar_variants %>%
+   left_join(
+      ClinVar_varNames %>%
+         arrange(desc(type)) %>%
+         filter(!duplicated(varId)) %>%
+         rename("id"="varId") %>%
+         select(id, name)
+   )
+
+###############################################################################@
+## _+ varEntrez, entrezNames ----
+
+ClinVar_varEntrez <- ClinVar_measureRelationships %>%
+   as_tibble()%>%
+   filter(xref.db=="Gene") %>%
+   select(measureId, xref.id, type) %>%
+   rename("varId"="measureId", "entrez"="xref.id") %>%
+   mutate(
+      varId=as.integer(varId),
+      entrez=as.integer(entrez)
+   ) %>%
+   unique()
 ##
-ClinVar_entrezNames <- unique(ClinVar_measureRelationships[
-   which(ClinVar_measureRelationships$xref.db=="Gene"),
-   c("xref.id", "name", "symbol")
-   ])
-colnames(ClinVar_entrezNames) <- c("entrez", "name", "symbol")
-# otherRSTypes <- unique(setdiff(ClinVar_measureRelationships$type, "variant in gene"))
-# if(length(otherRSTypes)>0){
-#   warning("Other measureRelationShips types: ", paste(otherRSTypes, collapse=", "))
-# }
+ClinVar_entrezNames <- ClinVar_measureRelationships %>%
+   as_tibble()%>%
+   filter(xref.db=="Gene") %>%
+   select(xref.id, name, symbol) %>%
+   rename("entrez"="xref.id") %>%
+   mutate(
+      entrez=as.integer(entrez)
+   ) %>%
+   unique()
 rm(ClinVar_measureRelationships)
-##
-ClinVar_varCytoLoc <- ClinVar_measureCytogeneticLocations[,c("measureId", "cytogenicLocation")]
+
+###############################################################################@
+## _+ varCytoLoc ----
+
+ClinVar_varCytoLoc <- ClinVar_measureCytogeneticLocations %>%
+   as_tibble() %>%
+   select(measureId, cytogenicLocation) %>%
+   rename("varId"="measureId", "location"="cytogenicLocation") %>%
+   mutate(varId=as.integer(varId)) %>%
+   unique()
 colnames(ClinVar_varCytoLoc) <- c("varId", "location")
 rm(ClinVar_measureCytogeneticLocations)
-##
-ClinVar_varSeqLoc <- ClinVar_measureSequenceLocations[,c(
-   "measureId", setdiff(colnames(ClinVar_measureSequenceLocations), "measureId")
-)]
-colnames(ClinVar_varSeqLoc) <- c(
-   "varId", "Accession", "alternateAllele", "Assembly",
-   "AssemblyAccessionVersion", "AssemblyStatus", "Chr",
-   "display_start", "display_stop", "innerStart", "innerStop",
-   "outerStart", "outerStop", "referenceAllele", "start", "stop",
-   "Strand", "variantLength"
-)
+
+###############################################################################@
+## _+ varSeqLoc ----
+
+ClinVar_varSeqLoc <- ClinVar_measureSequenceLocations %>%
+   as_tibble(ClinVar_measureSequenceLocations) %>%
+   select(
+      measureId, Accession, alternateAllele, Assembly,
+      AssemblyAccessionVersion, AssemblyStatus, Chr,
+      display_start, display_stop, innerStart, innerStop,
+      outerStart, outerStop, referenceAllele, start, stop,
+      Strand, variantLength
+   ) %>%
+   rename("varId"="measureId") %>%
+   mutate(
+      varId=as.integer(varId),
+      display_start=as.integer(display_start),
+      display_stop=as.integer(display_stop),
+      innerStart=as.integer(innerStart),
+      innerStop=as.integer(innerStop),
+      outerStart=as.integer(outerStart),
+      outerStop=as.integer(outerStop),
+      start=as.integer(start),
+      stop=as.integer(stop)
+   ) %>%
+   unique()
 rm(ClinVar_measureSequenceLocations)
-##
-ClinVar_varXRef <- ClinVar_measureXRef[,c("measureId", "ID", "DB", "Type")]
-colnames(ClinVar_varXRef) <- c("varId", "id", "db", "type")
+
+###############################################################################@
+## _+ varXRef ----
+
+ClinVar_varXRef <- ClinVar_measureXRef %>%
+   as_tibble() %>%
+   select(measureId, ID, DB, Type) %>%
+   rename("varId"="measureId", "id"="ID", "db"="DB", "type"="Type") %>%
+   mutate(varId=as.integer(varId)) %>%
+   unique()
 rm(ClinVar_measureXRef)
-##
-ClinVar_varAttributes <- ClinVar_measureAttributes[
-   ,
-   c("measureId", setdiff(colnames(ClinVar_measureAttributes), "measureId"))
-   ]
-colnames(ClinVar_varAttributes) <- c("varId", "Type", "integerValue", "Change", "value")
+
+###############################################################################@
+## _+ varAttributes ----
+
+ClinVar_varAttributes <- ClinVar_measureAttributes %>%
+   as_tibble() %>%
+   select(
+      measureId, Type, integerValue, Change, value
+   ) %>%
+   rename("varId"="measureId") %>%
+   mutate(
+      varId=as.integer(varId),
+      integerValue=as.integer(integerValue),
+      value=ifelse(value=="", NA,value)
+   )
 rm(ClinVar_measureAttributes)
 ##
 message(Sys.time())
 message("... Done\n")
 
 ###############################################################################@
-## Data from disease_names ----
-###############################################################################@
-
-# message("Parsing diseases_names...")
-# message(Sys.time())
-# ##
-# rd <- readLines(file.path(sdir, "disease_names"))
-# header <- unlist(strsplit(rd[1], split="\t"))
-# rdlist <- strsplit(rd[-1], "\t")
-# rdlist <- lapply(
-#    rdlist, function(x){
-#       x <- sub("^ ", "", sub(" $", "", x))
-#       toRet <- x
-#       if(length(x)>7){
-#          toRet <- c(
-#             paste(x[1:(length(x)-6)], collapse=" // "),
-#             x[(length(x)-5):length(x)]
-#          )
-#       }
-#       return(toRet)
-#    }
-# )
-# ClinVar_diseaseNames <- as.data.frame(do.call(
-#    rbind,
-#    rdlist
-# ), stringsAsFactors=F)
-# colnames(ClinVar_diseaseNames) <- c(
-#    "name", "source", "concept", "sourceID", "MIM", "LastModif", "Category"
-# )
-# rm(rd, rdlist, header)
-# ##
-# message(Sys.time())
-# message("... Done\n")
-
-###############################################################################@
 ## Custom information ----
 ###############################################################################@
-ClinVar_clinSigOrder <- data.frame(
+ClinVar_clinSigOrder <- tibble(
    label=c(
       "protective",
       "Benign",
@@ -308,10 +416,9 @@ ClinVar_clinSigOrder <- data.frame(
       "Likely pathogenic",
       "Pathogenic"
    ),
-   order=1:13,
-   stringsAsFactors=FALSE
+   order=1:13
 )
-ClinVar_revStatOrder <- data.frame(
+ClinVar_revStatOrder <- tibble(
    label=c(
       "not classified by submitter",
       "classified by single submitter", 
@@ -319,8 +426,7 @@ ClinVar_revStatOrder <- data.frame(
       "reviewed by professional society",
       "reviewed by expert panel"
    ),
-   order=1:5,
-   stringsAsFactors=FALSE
+   order=1:5
 )
 
 ###############################################################################@
@@ -332,15 +438,9 @@ message(Sys.time())
 toSave <- grep("^ClinVar[_]", ls(), value=T)
 for(f in toSave){
    message(paste("   Writing", f))
-   ## Ensure unicity
-   toWrite <- get(f)
-   write.table(
+   write_tsv(
       get(f),
-      file=file.path(ddir, paste(f, ".txt", sep="")),
-      sep="\t",
-      row.names=FALSE, col.names=TRUE,
-      quote=TRUE,
-      qmethod="double"
+      path=file.path(ddir, paste(f, ".txt", sep=""))
    )
 }
 message(Sys.time())
