@@ -1,0 +1,28 @@
+{
+	"collection":"BE",
+	"resource":"ClinVar",
+	"tables":[
+		{
+			"name":"ClinVar_entrezNames",
+			"fields":{
+				"be": {
+					"static":true,
+					"value":"Gene"
+				},
+				"source": {
+					"static":true,
+					"value":"EntrezGene"
+				},
+				"organism": {
+					"static":true,
+					"type":"Scientific name",
+					"value":"Homo sapiens"
+				},
+				"identifier": {
+					"static":false,
+					"value":"entrez"
+				}
+			}
+		}
+	]
+}

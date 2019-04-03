@@ -1,0 +1,19 @@
+{
+	"collection":"Condition",
+	"resource":"ClinVar",
+	"tables":[
+		{
+			"name":"ClinVar_traitCref",
+			"fields":{
+				"source": {
+					"static":false,
+					"value":"db"
+				},
+				"identifier": {
+					"static":false,
+					"value":"id"
+				}
+			}
+		}
+	]
+}
