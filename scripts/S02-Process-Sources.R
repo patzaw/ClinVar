@@ -229,7 +229,8 @@ if(length(toAdd) > 0){
 }
 ClinVar_traits <- ClinVar_traits%>%
    rename("id"="trait.id", "name"="trait.name") %>%
-   mutate(id=as.integer(id))
+   mutate(id=as.integer(id)) %>%
+   filter(which(!duplicated(id)))
 
 ###############################################################################@
 ## _+ traitNames ----
@@ -435,6 +436,8 @@ ClinVar_revStatOrder <- tibble(
 
 message("Writing tables...")
 message(Sys.time())
+file.rename(ddir, paste0(ddir, "_BCK_", Sys.Date()))
+dir.create(ddir)
 toSave <- grep("^ClinVar[_]", ls(), value=T)
 for(f in toSave){
    message(paste("   Writing", f))
