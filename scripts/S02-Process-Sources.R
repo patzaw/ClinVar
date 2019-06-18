@@ -230,7 +230,7 @@ if(length(toAdd) > 0){
 ClinVar_traits <- ClinVar_traits%>%
    rename("id"="trait.id", "name"="trait.name") %>%
    mutate(id=as.integer(id)) %>%
-   filter(which(!duplicated(id)))
+   filter(!duplicated(id))
 
 ###############################################################################@
 ## _+ traitNames ----
