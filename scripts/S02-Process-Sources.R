@@ -93,11 +93,15 @@ toMerge <- unique(unlist(lapply(cvDbList, names)))
 for(tm in toMerge){
    message(tm)
    assign(
-      x=paste("ClinVar_", tm, sep=""),
+      x=paste0("ClinVar_", tm),
       value=lrbind(cvDbList, tm)
    )
    message(Sys.time())
 }
+save(
+   list=paste0("ClinVar_", toMerge),
+   file=paste0("tmp-tables-", format(Sys.time(), "%Y-%m-%d-%H%M%S"), ".rda")
+)
 message(Sys.time())
 message("... Done\n")
 
@@ -223,7 +227,7 @@ if(length(toAdd) > 0){
       bind_rows(
          ClinVar_traitNames %>%
          as_tibble() %>%
-         filter(trait.id %in% toAdd) & !duplicated(trait.id) %>%
+         filter(trait.id %in% toAdd & !duplicated(trait.id)) %>%
          select(trait.id, trait.name)
       )
 }

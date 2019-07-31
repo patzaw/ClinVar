@@ -4,3 +4,5 @@
 **.bak
 data*
 sources
+.lastestUpdates.txt
+scripts/tmp-tables*.rda
