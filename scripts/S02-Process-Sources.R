@@ -279,6 +279,16 @@ ClinVar_variants <- ClinVar_measures %>%
    select(id, type) %>%
    mutate(id=as.integer(id)) %>%
    unique()
+dupMistake <- ClinVar_variants %>%
+   filter(duplicated(id))
+if(nrow(dupMistake) > 0){
+   message(
+      "Warning message: The following duplicated variants have been removed:"
+   )
+   print(dupMistake)
+   ClinVar_variants <- ClinVar_variants %>%
+      filter(!duplicated(id))
+}
 ##
 ClinVar_rcvaVariant <- ClinVar_measures %>%
    as_tibble() %>%
