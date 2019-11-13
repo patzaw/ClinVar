@@ -415,33 +415,68 @@ message("... Done\n")
 ###############################################################################@
 ## Custom information ----
 ###############################################################################@
+ClinVar_clinSigOrder <- c(
+	"protective",
+	"Benign",
+	"Benign, other",
+	"Benign/Likely benign",
+	"Benign/Likely benign, other",
+	"Likely benign",
+	"Likely benign, other",
+	"drug response",
+	"confers sensitivity",
+	"conflicting data from submitters", 
+	"association not found",
+	"not provided",
+	"Uncertain significance",
+	"Uncertain significance, other",
+	"Uncertain significance, risk factor",
+	"Conflicting interpretations of pathogenicity, other",
+	"Conflicting interpretations of pathogenicity",
+	"Conflicting interpretations of pathogenicity, risk factor",
+	"other",
+	"other, risk factor",
+	"association",
+	"Benign, risk factor",
+	"Benign/Likely benign, risk factor",
+	"Likely benign, risk factor",
+	"risk factor",
+	"Uncertain significance, Affects",
+	"Affects, other",
+	"Affects",
+	"Likely pathogenic, risk factor",
+	"Pathogenic/Likely pathogenic, risk factor",
+	"Likely pathogenic",
+	"Likely pathogenic, other",
+	"Pathogenic/Likely pathogenic",
+	"Pathogenic/Likely pathogenic, other",
+	"Pathogenic, drug response",
+	"Pathogenic, risk factor",
+	"Pathogenic, association",
+	"Pathogenic, other",
+	"Pathogenic, Affects",
+	"Pathogenic"
+)
 ClinVar_clinSigOrder <- tibble(
-   label=c(
-      "protective",
-      "Benign",
-      "Likely benign",
-      "drug response",
-      "confers sensitivity",
-      "conflicting data from submitters", 
-      "not provided",
-      "Uncertain significance",
-      "other",
-      "association",
-      "risk factor",
-      "Likely pathogenic",
-      "Pathogenic"
-   ),
-   order=1:13
+	label=ClinVar_clinSigOrder,
+	order=1:length(ClinVar_clinSigOrder)
+)
+ClinVar_revStatOrder <- c(
+	"no assertion provided",
+	"not classified by submitter",
+	"no assertion criteria provided",
+	"classified by single submitter", 
+	"criteria provided, single submitter",
+	"criteria provided, conflicting interpretations",
+	"classified by multiple submitters",
+	"criteria provided, multiple submitters, no conflicts",
+	"reviewed by professional society",
+	"practice guideline",
+	"reviewed by expert panel"
 )
 ClinVar_revStatOrder <- tibble(
-   label=c(
-      "not classified by submitter",
-      "classified by single submitter", 
-      "classified by multiple submitters",
-      "reviewed by professional society",
-      "reviewed by expert panel"
-   ),
-   order=1:5
+	label=ClinVar_revStatOrder,
+	order=1:length(ClinVar_revStatOrder)
 )
 
 ###############################################################################@
