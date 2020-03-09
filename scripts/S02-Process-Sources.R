@@ -448,6 +448,7 @@ ClinVar_clinSigOrder <- c(
 	"Pathogenic/Likely pathogenic, risk factor",
 	"Likely pathogenic",
 	"Likely pathogenic, other",
+	"Likely pathogenic, Affects",
 	"Pathogenic/Likely pathogenic",
 	"Pathogenic/Likely pathogenic, other",
 	"Pathogenic, drug response",
