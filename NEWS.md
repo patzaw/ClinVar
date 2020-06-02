@@ -2,6 +2,10 @@
 <!----------------------------------------------------------------------------->
 ## Version 0.8 -- Release notes
 
+### DESCRIPTION changes
+
+   - Author information
+
 ### Implementation changes
    
    - Remove trailing spaces.
