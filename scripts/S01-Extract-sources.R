@@ -1,6 +1,6 @@
 library(RJSONIO)
 library(here)
-source(here("../00-Utils/downloadSourceFiles.R"))
+source(here("scripts/downloadSourceFiles.R"))
 
 desc <- readJSONStream(here("DESCRIPTION.json"))
 

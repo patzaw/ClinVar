@@ -3,7 +3,7 @@ library(parallel)
 library(XML)
 library(tidyverse)
 
-source(here("../00-Utils/writeLastUpdate.R"))
+source(here("scripts/writeLastUpdate.R"))
 
 source(here("scripts/clinVar-Functions.R"))
 
