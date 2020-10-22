@@ -1,13 +1,36 @@
 {
+	"$schema":"TKCat_Condition_collection_1.0",
+	"$id":"ClinVar_conditions_1.0",
 	"collection":"Condition",
 	"resource":"ClinVar",
 	"tables":[
 		{
 			"name":"ClinVar_traitCref",
 			"fields":{
+				"condition": {
+					"static":true,
+					"value":"Disease"
+				},
 				"source": {
 					"static":false,
 					"value":"db"
+				},
+				"identifier": {
+					"static":false,
+					"value":"id"
+				}
+			}
+		},
+		{
+			"name":"ClinVar_traits",
+			"fields":{
+				"condition": {
+					"static":true,
+					"value":"Disease"
+				},
+				"source": {
+					"static":true,
+					"value":"ClinVar"
 				},
 				"identifier": {
 					"static":false,
