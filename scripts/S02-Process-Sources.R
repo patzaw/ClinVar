@@ -505,7 +505,7 @@ for(f in toSave){
    tv <- distinct(tv)
    write_tsv(
       tv,
-      path=file.path(ddir, paste(f, ".txt", sep=""))
+      file=file.path(ddir, paste(f, ".txt", sep=""))
    )
 }
 message(Sys.time())
