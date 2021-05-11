@@ -3,12 +3,12 @@
 	"title": "Data extracted from the ClinVar database",
 	"description": "ClinVar is a freely accessible, public archive of reports of the relationships among human variations and phenotypes, with supporting evidence.",
 	"reference URL": "https://www.ncbi.nlm.nih.gov/clinvar/",
-	"version": "0.10",
+	"version": "0.11",
 	"maintainer": "Patrice Godard <patrice.godard@ucb.com>",
 	"source files": [
 		{
 			"name":"ClinVarFullRelease.xml.gz",
-			"URL template":"ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_YYYY-MM.xml.gz",
+			"URL template":"https://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_YYYY-MM.xml.gz",
 			"remote update frequency": {
 				"value": 0.03,
 				"units": "1/day"
@@ -16,7 +16,7 @@
 		},
 		{
 			"name": "README.txt",
-			"URL template": "ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/README.txt",
+			"URL template": "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/README.txt",
 			"remote update frequency": {
 				"value": 0.03,
 				"units": "1/day"
