@@ -263,10 +263,12 @@ for(i in 1:nrow(dbCleanTable)){
    oriDb <- dbCleanTable$ClinVar.DB[i]
    finalDb <- dbCleanTable$DB[i]
    prefix <- dbCleanTable$Prefix.to.remove[i]
-   ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"] <- str_remove(
-      ClinVar_traitCref$id[which(ClinVar_traitCref$db==oriDb)],
-      paste0("^", prefix)
-   )
+   if(!is.na(prefix)){
+      ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"] <- str_remove(
+         ClinVar_traitCref$id[which(ClinVar_traitCref$db==oriDb)],
+         sprintf("^(%s)*", prefix)
+      )
+   }
    ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "db"] <- finalDb
 }
 
