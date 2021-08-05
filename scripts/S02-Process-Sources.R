@@ -7,6 +7,11 @@ source(here("scripts/writeLastUpdate.R"))
 
 source(here("scripts/clinVar-Functions.R"))
 
+rm_tr_spaces <- function(x){
+   stringr::str_remove(x, stringr::regex("^ *")) %>%
+      stringr::str_remove(stringr::regex(" *$"))
+}
+
 ##
 mc.cores <- 30
 sdir <- here("sources")
@@ -259,14 +264,22 @@ rm(ClinVar_traitXRef)
 dbCleanTable <- read_tsv(
    here("scripts/DB-ID-Cleaning-Table.txt")
 )
+ClinVar_traitCref$id <- rm_tr_spaces(ClinVar_traitCref$id)
 for(i in 1:nrow(dbCleanTable)){
    oriDb <- dbCleanTable$ClinVar.DB[i]
    finalDb <- dbCleanTable$DB[i]
    prefix <- dbCleanTable$Prefix.to.remove[i]
+   blanks <- dbCleanTable$Blanks[i]
    if(!is.na(prefix)){
       ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"] <- str_remove(
          ClinVar_traitCref$id[which(ClinVar_traitCref$db==oriDb)],
          sprintf("^(%s)*", prefix)
+      )
+   }
+   if(!blanks){
+      ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "id"] <- str_remove(
+         ClinVar_traitCref$id[which(ClinVar_traitCref$db==oriDb)],
+         "[[:space:]]+.*$"
       )
    }
    ClinVar_traitCref[which(ClinVar_traitCref$db==oriDb), "db"] <- finalDb
@@ -488,11 +501,6 @@ ClinVar_revStatOrder <- tibble(
 ###############################################################################@
 ## Writing tables ----
 ###############################################################################@
-
-rm_tr_spaces <- function(x){
-   stringr::str_remove(x, stringr::regex("^ *")) %>%
-      stringr::str_remove(stringr::regex(" *$"))
-}
 
 message("Writing tables...")
 message(Sys.time())
