@@ -13,7 +13,7 @@ rm_tr_spaces <- function(x){
 }
 
 ##
-mc.cores <- 30
+mc.cores <- 12
 sdir <- here("sources")
 ddir <- here("data")
 
@@ -355,7 +355,8 @@ ClinVar_entrezNames <- ClinVar_measureRelationships %>%
    mutate(
       entrez=as.integer(entrez)
    ) %>%
-   unique()
+   unique() %>% 
+   distinct(entrez, .keep_all=TRUE)
 rm(ClinVar_measureRelationships)
 
 ###############################################################################@
@@ -518,7 +519,8 @@ for(f in toSave){
    tv <- distinct(tv)
    write_tsv(
       tv,
-      file=file.path(ddir, paste(f, ".txt", sep=""))
+      file=file.path(ddir, paste(f, ".txt", sep="")),
+      quote="all", na="<NA>"
    )
 }
 message(Sys.time())
