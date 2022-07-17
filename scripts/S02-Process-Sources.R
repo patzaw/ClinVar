@@ -13,7 +13,7 @@ rm_tr_spaces <- function(x){
 }
 
 ##
-mc.cores <- 12
+mc.cores <- 10
 sdir <- here("sources")
 ddir <- here("data")
 
