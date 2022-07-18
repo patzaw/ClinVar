@@ -476,6 +476,7 @@ ClinVar_clinSigOrder <- c(
    "Benign/Likely benign; risk factor",
 	"Likely benign, risk factor",
    "Likely benign; risk factor",
+	"Likely risk allele; risk factor",
 	"risk factor",
 	"Uncertain significance, Affects",
 	"Affects, other",
