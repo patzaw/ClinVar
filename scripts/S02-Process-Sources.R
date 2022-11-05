@@ -13,7 +13,7 @@ rm_tr_spaces <- function(x){
 }
 
 ##
-mc.cores <- 10
+mc.cores <- 15
 sdir <- here("sources")
 ddir <- here("data")
 
@@ -37,6 +37,19 @@ ClinVar_sourceFiles <- sfi[which(sfi$inUse), c("url", "current")] %>%
 
 ###############################################################################@
 ## _+ Loading and parsing XML ----
+
+message("Parsing XML...")
+message(Sys.time())
+xmlFile <- file.path(sdir, "ClinVarFullRelease.xml.gz")
+parseCvByBatch(
+   f=xmlFile, odir=here("scripts/now"), by=10^6, nmax=Inf,
+   mc.cores=mc.cores
+)
+message(Sys.time())
+message("... Done\n")
+
+
+
 message("Loading XML...")
 message(Sys.time())
 xmlFile <- file.path(sdir, "ClinVarFullRelease.xml.gz")

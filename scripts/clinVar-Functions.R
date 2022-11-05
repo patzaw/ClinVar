@@ -1,4 +1,4 @@
-############################
+############################@
 # lrbind <- function(l, item, mc.cores=1){
 #   unique(do.call(rbind, mclapply(
 #     l,
@@ -7,7 +7,7 @@
 #   )))
 # }
 
-############################
+############################@
 lrbind <- function(l, item){
     litem <- lapply(
         l,
@@ -27,7 +27,7 @@ lrbind <- function(l, item){
     return(unique(toRet))
 }
 
-############################
+############################@
 readClinVar <- function(file, n=-1L){
     cvRaw <- readLines(file, n=n)
     encoding <- sub(
@@ -54,7 +54,104 @@ readClinVar <- function(file, n=-1L){
     return(cvList)
 }
 
-############################
+
+
+############################@
+parseCvByBatch <- function(f, odir, by=10^6, nmax=Inf, mc.cores=1){
+   
+   con <- file(f, "r")
+   
+   if(!file.exists(odir)){
+      dir.create(odir)
+   }
+   saved <- list.files(odir, pattern="^subcvs-[[:digit:]]+[.]rds$")
+   if(length(saved)>0){
+      encoding <- readRDS(file.path(odir, "encoding.rds"))
+      savedi <- as.numeric(sub("subcvs-", "", sub( "[.]rds", "", saved)))
+      i <- max(savedi)
+      last <- readRDS(file.path(odir, saved[which.max(savedi)]))
+      n <- attr(last, "read")
+      if(file.exists(file.path(odir, "total.rds"))){
+         stop(
+            "Already done! ",
+            n, " lines with records / ",
+            readLines(file.path(odir, "total.rds")), " lines"
+         )
+      }
+      readLines(con, n=n)
+      ends <- 0
+      cvRaw <- c()
+      gc()
+   }else{
+      cvRaw <- readLines(con, n=1)
+      encoding <- sub(
+         "\".*$",
+         "",
+         sub("^[<][?]xml .*encoding=\"", "", cvRaw)
+      )
+      saveRDS(encoding, file=file.path(odir, "encoding.rds"), compress=FALSE)
+      n <- 1
+      i <- 0
+   }
+   
+   torep <- c()
+   while(TRUE){
+      i <- i+1
+      message(n, " lines read")
+      if(n >= nmax){
+         break()
+      }
+      cvRaw <- readLines(con, n=by)
+      if(length(cvRaw)==0){
+         break()
+      }
+      n <- n+length(cvRaw)
+      cvRaw <- c(torep, cvRaw)
+      starts <- grep("<ClinVarSet .*?>", cvRaw)
+      if(length(starts)==0){
+         saveRDS(n, file.path(odir, "total.rds"))
+         break()
+      }
+      ends <- grep("<[/]ClinVarSet>", cvRaw)
+      starts <- starts[1:length(ends)]
+      if(max(ends) < length(cvRaw)){
+         torep <- cvRaw[(max(ends)+1):length(cvRaw)]
+      }else{
+         torep <- c()
+      }
+      cvList <- apply(
+         cbind(starts, ends), 1,
+         function(x) sub(
+            "[^>]*$",
+            "",
+            sub(
+               "^[^<]*",
+               "",
+               paste(cvRaw[x[1]:x[2]], collapse="\n")
+            )
+         )
+      )
+      attr(cvList, "encoding") <- encoding
+      tosave <- mclapply(
+         cvList,
+         function(x){
+            parseCvs(xmlRoot(xmlParse(x, encoding=encoding)))
+         },
+         mc.cores=mc.cores
+      )
+      attr(tosave, "read") <- n - length(cvRaw) + max(ends)
+      saveRDS(
+         tosave,
+         file=file.path(odir, paste0("subcvs-", i, ".rds")),
+         compress=FALSE
+      )
+   }
+   close(con)
+   
+   return(NULL)
+}
+
+############################@
 parseCvs <- function(node){
     
     ## Preparing the list to return
@@ -109,7 +206,7 @@ parseCvs <- function(node){
     
 }
 
-############################
+############################@
 parseRcva <- function(node, cvsId){
     
     ## Preparing the list to return
@@ -160,7 +257,7 @@ parseRcva <- function(node, cvsId){
     
 }
 
-############################
+############################@
 getAttrSet <- function(node, attToGet=c("Type", "integerValue")){
     toTake <- which(names(node)=="AttributeSet")
     if(length(toTake)==0){
@@ -183,7 +280,7 @@ getAttrSet <- function(node, attToGet=c("Type", "integerValue")){
     }
 }
 
-############################
+############################@
 parseObservedIn <- function(node, rcvaId){
     toTake <- which(names(node)=="ObservedIn")
     if(length(toTake)==0){
@@ -212,7 +309,7 @@ parseObservedIn <- function(node, rcvaId){
     }
 }
 
-############################
+############################@
 parseCvaObservedIn <- function(node, cvaId){
     toTake <- which(names(node)=="ObservedIn")
     if(length(toTake)==0){
@@ -235,7 +332,7 @@ parseCvaObservedIn <- function(node, cvaId){
     }
 }
 
-############################
+############################@
 parseMeasureSet <- function(node, rcvaId){
     if("MeasureSet" %in% names(node)){
         ms <- node[["MeasureSet"]]
@@ -362,7 +459,7 @@ parseMeasureSet <- function(node, rcvaId){
     return(toRet)
 }
 
-############################
+############################@
 getSeqLoc <- function(
     node,
     attToGet=c(
@@ -394,7 +491,7 @@ getSeqLoc <- function(
     }
 }
 
-############################
+############################@
 getXRef <- function(node){
     attToGet <- c("DB", "ID", "Type")
     toTake <- which(names(node)=="XRef")
@@ -417,7 +514,7 @@ getXRef <- function(node){
     }
 }
 
-############################
+############################@
 getMeasureRelationship <- function(node, measureId){
     toTake <- which(names(node)=="MeasureRelationship")
     if(length(toTake)==0){
@@ -490,7 +587,7 @@ getMeasureRelationship <- function(node, measureId){
     }
 }
 
-############################
+############################@
 parseTraitSet <- function(node, rcvaId){
     ts <- node[["TraitSet"]]
     toTake <- which(names(ts)=="Trait")
@@ -591,7 +688,7 @@ parseTraitSet <- function(node, rcvaId){
     
 }
 
-############################
+############################@
 parseCva <- function(node, cvsId){
     toTake <- which(names(node)=="ClinVarAssertion")
     toRet <- lapply(
