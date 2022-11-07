@@ -186,14 +186,16 @@ parseCvs <- function(node){
     toRet$observedIn <- rcvaOutput$observedIn
     
     # toRet$measureSet <- rcvaOutput$measureSet
-    for(ln in names(rcvaOutput$measureSet)){
-        toRet[[ln]] <- rcvaOutput$measureSet[[ln]]
-    }
+    # for(ln in names(rcvaOutput$measureSet)){
+    #     toRet[[ln]] <- rcvaOutput$measureSet[[ln]]
+    # }
+    toRet <- c(toRet, rcvaOutput$measureSet)
     
     # toRet$traitSet <- rcvaOutput$traitSet
-    for(ln in names(rcvaOutput$traitSet)){
-        toRet[[ln]] <- rcvaOutput$traitSet[[ln]]
-    }
+    # for(ln in names(rcvaOutput$traitSet)){
+    #     toRet[[ln]] <- rcvaOutput$traitSet[[ln]]
+    # }
+    toRet <- c(toRet, rcvaOutput$traitSet)
     
     ## ClinVarAssertion
     cvaOutput <- parseCva(node, cvsId)
