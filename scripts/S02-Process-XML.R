@@ -48,7 +48,7 @@ message(Sys.time())
 
 message("Combining records...")
 message(Sys.time())
-# cvs_dir <- here("scripts/CVS-batches-2022-11-09_154614")
+# cvs_dir <- here("scripts/CVS-batches-2023-02-12_195208/")
 d <- combine_ClinVarSets(cvs_dir)
 message(Sys.time())
 
@@ -114,14 +114,18 @@ ClinVar_clinSigOrder <- c(
    "Benign; risk factor",
    "Benign/Likely benign, risk factor",
    "Benign/Likely benign; risk factor",
+   "Likely benign; association",
    "Likely benign, risk factor",
    "Likely benign; risk factor",
    "Likely risk allele; risk factor",
    "risk factor",
    "Established risk allele",
+   "Uncertain significance; association",
    "Uncertain significance, Affects",
+   "Uncertain significance/Uncertain risk allele",
    "Affects, other",
    "Affects",
+   "Conflicting interpretations of pathogenicity; other; risk factor", 
    "Likely pathogenic; risk factor",
    "Likely pathogenic, risk factor",
    "Pathogenic/Likely pathogenic, association",
@@ -134,8 +138,15 @@ ClinVar_clinSigOrder <- c(
    "Likely pathogenic, other",
    "Likely pathogenic; other",
    "Likely pathogenic; other; risk factor",
+   "Likely pathogenic/Likely risk allele",
    "Likely pathogenic, Affects",
    "Likely pathogenic; Affects",
+   "Pathogenic/Pathogenic, low penetrance",
+   "Pathogenic/Likely pathogenic/Likely risk allele",
+   "Pathogenic/Likely risk allele",
+   "Pathogenic/Likely pathogenic/Established risk allele",
+   "Pathogenic/Likely pathogenic/Established risk allele; risk factor",
+   "Pathogenic/Likely pathogenic/Pathogenic, low penetrance",
    "Pathogenic/Likely pathogenic",
    "Pathogenic/Likely pathogenic, other",
    "Pathogenic/Likely pathogenic; other",
@@ -143,6 +154,7 @@ ClinVar_clinSigOrder <- c(
    "Pathogenic; drug response",
    "Pathogenic, risk factor",
    "Pathogenic; risk factor",
+   "Pathogenic/Established risk allele",
    "Pathogenic, association",
    "Pathogenic; association",
    "Pathogenic, low penetrance" ,
