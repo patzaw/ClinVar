@@ -40,7 +40,7 @@ downloadSourceFiles <- function(
       url <- urls[name]
       ufile <- basename(url)
       current <- archTable$current[which(
-         archTable$file==name & archTable$url==url
+         archTable$file==name & archTable$url==url & archTable$inUse
       )]
       protocol <- ifelse(
          length(grep("^ftp://", url, ignore.case=TRUE)==1), "FTP",
