@@ -21,20 +21,20 @@ db_info(fdb)$timestamp <- tst
 # mdb <- as_memoMDB(fdb, check=FALSE)
 # message("In CH")
 # message(Sys.time())
-# chdb <- as_chMDB(mdb, k, timestamp=db_info(mdb)$timestamp, by=10^7)
+# chdb <- as_chMDB(mdb, .tkcon, timestamp=db_info(mdb)$timestamp, by=10^7)
 # message(Sys.time())
 
-newdb <- list(
-   ori=select(
-      chdb, -all_of(intersect(names(chdb), c(names(tbkmspec), names(collibra))))
-   ),
-   part=select(fdb, c(names(tbkmspec), names(collibra)))
-) %>% set_names(c(rn, "part"))
-db_info(newdb$part)$name <- "part"
-newdb <- metaMDB(
-   MDBs=newdb, relationalTables=NULL,
-   dataModel=data_model(fdb),
-   dbInfo=db_info(fdb),
-   check=FALSE
-)
-chdb <- as_chMDB(newdb, .tkcon, timestamp=db_info(newdb)$timestamp, by=10^7)
+# newdb <- list(
+#    ori=select(
+#       chdb, -all_of(intersect(names(chdb), c(names(tbkmspec), names(collibra))))
+#    ),
+#    part=select(fdb, c(names(tbkmspec), names(collibra)))
+# ) %>% set_names(c(rn, "part"))
+# db_info(newdb$part)$name <- "part"
+# newdb <- metaMDB(
+#    MDBs=newdb, relationalTables=NULL,
+#    dataModel=data_model(fdb),
+#    dbInfo=db_info(fdb),
+#    check=FALSE
+# )
+# chdb <- as_chMDB(newdb, .tkcon, timestamp=db_info(newdb)$timestamp, by=10^7)

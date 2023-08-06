@@ -53,7 +53,7 @@ if(dir.exists(f)){
       file.path(expDir, paste0(db_info(toExport)$name, "-BCK-", Sys.Date()))
    ) %>% invisible()
 }
-as_fileMDB(toExport, path=expDir)
+as_fileMDB(toExport, path=expDir, htmlModel = FALSE)
 
 ###############################################################################@
 ## Save TBKM spepc ----
@@ -65,5 +65,5 @@ if(dir.exists(f)){
       file.path(expDir, paste0(db_info(toExport)$name, "-BCK-", Sys.Date()))
    ) %>% invisible()
 }
-as_fileMDB(toExport, path=expDir)
+as_fileMDB(toExport, path=expDir, htmlModel = FALSE)
 

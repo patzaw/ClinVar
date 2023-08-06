@@ -373,7 +373,13 @@ parse_rcva_ObservedIn <- function(node){
             sample <- x[["Sample"]]
             return(data.frame(
                origin= XML::xmlValue(sample[["Origin"]]),
-               taxonomyId=XML::xmlAttrs(sample[["Species"]])["TaxonomyId"],
+               taxonomyId=if(is.null(
+                  XML::xmlAttrs(sample[["Species"]])["TaxonomyId"]
+               )){
+                  "XML error"
+               }else{
+                  XML::xmlAttrs(sample[["Species"]])["TaxonomyId"]
+               },
                species= XML::xmlValue(sample[["Species"]]),
                affectedStatus= XML::xmlValue(
                   sample[["AffectedStatus"]]
