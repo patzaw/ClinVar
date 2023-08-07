@@ -1,10 +1,10 @@
 source("~/opt/KMT.R")
 library(here)
 
-rn <- "ClinVar"
+fdb <- read_fileMDB(here())
+rn <- db_info(fdb)$name
 chdb <- get_MDB(.tkcon, rn, check=FALSE)
 
-fdb <- read_fileMDB(here())
 stopifnot(db_info(fdb)$name==db_info(chdb)$name)
 tbkmspec <- read_fileMDB(here(sprintf("TBKM/TBKM specification for %s", rn)))
 collibra <- read_fileMDB(here(sprintf("TBKM/Collibra metadata for %s", rn)))
