@@ -48,7 +48,7 @@ message(Sys.time())
 
 message("Combining records...")
 message(Sys.time())
-# cvs_dir <- here("scripts/CVS-batches-2023-02-12_195208/")
+# cvs_dir <- here("scripts/CVS-batches-2024-01-09_014846/")
 d <- combine_ClinVarSets(cvs_dir)
 message(Sys.time())
 
@@ -83,11 +83,13 @@ ClinVar_clinSigOrder <- c(
    "Likely benign",
    "Likely benign, other",
    "Likely benign; other",
+   "Likely benign; other; risk factor",
    "drug response",
    "confers sensitivity",
    "conflicting data from submitters", 
    "association not found",
    "not provided",
+   "no classifications from unflagged records",
    "Uncertain significance",
    "Uncertain significance, other",
    "Uncertain significance; other",
@@ -133,6 +135,7 @@ ClinVar_clinSigOrder <- c(
    "Pathogenic/Likely pathogenic, risk factor",
    "Pathogenic/Likely pathogenic; risk factor",
    "Likely risk allele",
+   "Likely pathogenic; association",
    "Likely pathogenic, low penetrance",
    "Likely pathogenic",
    "Likely pathogenic, other",
@@ -179,6 +182,7 @@ ClinVar_clinSigOrder <- tibble(
 
 #### revStatOrder (CUSTOM) ----
 ClinVar_revStatOrder <- c(
+   "no classifications from unflagged records",
    "no assertion provided",
    "not classified by submitter",
    "no assertion criteria provided",

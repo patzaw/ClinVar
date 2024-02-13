@@ -35,8 +35,11 @@ fmb <- tbkmh$add_collibra_metadata(
       "Clinical research and development"
    ),
    `Primary Use Case`="Genetic variants in humans and association confidence to certain pathologies",
-   `Restrictions`="None",
+   `Restrictions`="No Restrictions",
+   `Restrictions summary`="None",
+   `License type`="Open access with standard license agreement e.g. Creative Commons",
    `License`="Public access",
+   `Data Protection Category`="Non-personal data",
    `Source of data`="Case reports and consortia for human genetics",
    `Nature of data`="Genotyping/ Whole genome genotyping or targeted genotyping (other tissues)",
    `Refresh Frequency`=as.character(NA),
